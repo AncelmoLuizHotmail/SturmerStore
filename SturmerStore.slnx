@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/Domain/">
+    <Project Path="SturmerStore.Domain/SturmerStore.Domain.csproj" />
+  </Folder>
+  <Folder Name="/TestesDomain/">
+    <Project Path="SturmerStore.TesteConsole/SturmerStore.TesteConsole.csproj" Id="914b50d3-dbc0-4474-9d02-710b5845528c" />
+  </Folder>
+</Solution>
