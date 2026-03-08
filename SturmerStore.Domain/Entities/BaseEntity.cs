@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SturmerStore.Domain.Entities
+﻿namespace SturmerStore.Domain.Entities
 {
     public abstract class BaseEntity
     {
-        public int Id { get; set; }
-        public DateTime DataInclusao { get; set; }
-        public DateTime DataAlteracao { get; set; }
+        public BaseEntity()
+        {
+            DataInclusao = DateTime.Now;
+        }
+
+        public int Id { get; protected set; }
+        public DateTime DataInclusao { get; private set; }
+        public DateTime? DataAlteracao { get; protected set; }
+        public DateTime? DataExclusao { get; protected set; }
     }
 }

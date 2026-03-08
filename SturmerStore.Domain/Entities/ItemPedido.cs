@@ -1,10 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SturmerStore.Domain.Entities
+﻿namespace SturmerStore.Domain.Entities
 {
     public class ItemPedido : BaseEntity
     {
+        public ItemPedido(int pedidoId, int produtoId, int quantidade)
+        {
+            PedidoId = pedidoId;
+            ProdutoId = produtoId;
+            Quantidade = quantidade;
+        }
+
+
+        public int PedidoId { get; private set; }
+        public int ProdutoId { get; private set; }
+        public int Quantidade { get; private set; }
+
+        public Pedido Pedido { get; private set; }
+        public Produto Produto { get; private set; }
+
     }
 }
