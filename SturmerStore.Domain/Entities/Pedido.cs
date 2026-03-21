@@ -33,6 +33,16 @@ namespace SturmerStore.Domain.Entities
             CalcularValorTotal();
         }
 
+        public void RemoverItem(int produtoId)
+        {
+            var item = Itens.FirstOrDefault(i => i.Produto.Id == produtoId);
+            if (item != null)
+            {
+                Itens.Remove(item);
+                CalcularValorTotal();
+            }
+        }
+
         private void CalcularValorTotal() 
         { 
             ValorTotal = Itens.Sum(i => i.ValorParcial);

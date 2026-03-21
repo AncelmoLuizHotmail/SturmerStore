@@ -13,15 +13,11 @@ listaProdutos.Add(xBacon);
 listaProdutos.Add(xSalada);
 listaProdutos.Add(cocaCola);
 
+Console.WriteLine("PRODUTOS DISPONÍVEIS");
 foreach (var item in listaProdutos)
 {
-    Console.WriteLine($@"Produto: {item.Nome} 
-                         Tipo: {item.Tipo}
-                         Preço: R${item.Preco} 
-                         Qtd no Estoque: {item.QuantidadeEstoque} 
-                         Data Cadastro: {item.DataInclusao}");
+    Console.WriteLine($@"Codigo: {item.Id} - {item.Nome} - {item.Tipo} - R${item.Preco} Qtd no Estoque: {item.QuantidadeEstoque}");
 }
-
 
 var clienteBreno = new Cliente(1,
                                 "Breno Sturmer",
@@ -32,9 +28,34 @@ var clienteBreno = new Cliente(1,
 
 var pedido = new Pedido(1, clienteBreno.Id, DateTime.Now, StatusPedidoEnum.Aberto);
 
-pedido.AdicionarItem(xBacon, 2);
-pedido.AdicionarItem(xSalada, 1);
-pedido.AdicionarItem(cocaCola, 3);
+Console.WriteLine();
+
+char resposta;
+
+do
+{
+    Console.Write("Digite o código do produto: ");
+    var codigoProduto = int.Parse(Console.ReadLine());
+
+    Console.Write("Digite a quantidade: ");
+    var quantidade = int.Parse(Console.ReadLine());
+
+    var produtoSelecionado = listaProdutos.FirstOrDefault(p => p.Id == codigoProduto);
+
+    if (produtoSelecionado == null || quantidade < 1)
+    {
+        Console.WriteLine("Produto não encontrado ou Quantidade inválida. \n Tente novamente.");
+    }
+    else 
+    {
+        pedido.AdicionarItem(produtoSelecionado, quantidade);
+    }
+
+    Console.Write("Deseja adicionar mais itens? (S/N)");
+    resposta = char.Parse(Console.ReadLine());
+    Console.WriteLine();
+} while (resposta == 'S' || resposta == 's');
+
 
 Console.WriteLine("COMANDA DO PEDIDO");
 foreach (var item in pedido.Itens)
@@ -44,12 +65,27 @@ foreach (var item in pedido.Itens)
 
 Console.WriteLine($"Valor Total do Pedido: R${pedido.ValorTotal}");
 
-Console.WriteLine();
+Console.WriteLine("Deseja remover algum item? (S/N)");
+var respostaRemover = char.Parse(Console.ReadLine());
 
-Console.WriteLine($"Status do Pedido: {pedido.Status}");
-pedido.FecharPedido();
-Console.WriteLine("Agora o pedido foi fechado!");
-Console.WriteLine($"Status do Pedido: {pedido.Status}");
+while (respostaRemover == 'S' || respostaRemover == 's')
+{
+    Console.Write("Digite o código do produto que deseja remover: ");
+    var codigoProdutoRemover = int.Parse(Console.ReadLine());
+    pedido.RemoverItem(codigoProdutoRemover);
+
+    Console.Write("Deseja remover mais algum item? (S/N)");
+    respostaRemover = char.Parse(Console.ReadLine());
+}
+
+Console.WriteLine($"Valor Total do Pedido: R${pedido.ValorTotal}");
+
+//Console.WriteLine();
+
+//Console.WriteLine($"Status do Pedido: {pedido.Status}");
+//pedido.FecharPedido();
+//Console.WriteLine("Agora o pedido foi fechado!");
+//Console.WriteLine($"Status do Pedido: {pedido.Status}");
 
 //AGORA VAI PAGAR O PEDIDO
 
