@@ -51,17 +51,13 @@ namespace SturmerStore.Domain.Entities
 
             var novaQuantidade = item.Quantidade - quantidade;
 
-            if(novaQuantidade < 0)
+            if (novaQuantidade < 0)
                 throw new InvalidOperationException("Quantidade a remover acima da quantidade atual");
 
             if (novaQuantidade == 0)
-            {
                 Itens.Remove(item);
-            }
             else
-            {
                 item.AtualizarQuantidade(novaQuantidade);
-            }
 
             CalcularValorTotal();
         }
@@ -71,17 +67,31 @@ namespace SturmerStore.Domain.Entities
             ValorTotal = Itens.Sum(i => i.ValorParcial);
         }
 
-        public void FecharPedido()
+        public void Fechar()
         {
+            if (Status != StatusPedidoEnum.Aberto)
+                throw new InvalidOperationException("Somente pedidos abertos podem ser fechados!");
+
             if (Itens.Count == 0)
                 throw new InvalidOperationException("Não é possível fechar um pedido sem itens.");
 
             Status = StatusPedidoEnum.Fechado;
         }
 
-        public void PagarPedido()
+        public void Pagar()
         {
+            if (Status != StatusPedidoEnum.Fechado)
+                throw new InvalidOperationException("Somente pedidos fechados podem ser pagos!");
 
+            Status = StatusPedidoEnum.Pago;
+        }
+
+        public void Cancelar()
+        {
+            if (Status == StatusPedidoEnum.Pago)
+                throw new InvalidOperationException("Pedidos pagos não podem ser cancelados");
+
+            Status = StatusPedidoEnum.Cancelado;
         }
     }
 }
