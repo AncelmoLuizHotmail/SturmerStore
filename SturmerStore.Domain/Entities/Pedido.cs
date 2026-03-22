@@ -4,9 +4,9 @@ namespace SturmerStore.Domain.Entities
 {
     public class Pedido : BaseEntity
     {
-        public Pedido(int id, 
-            int clienteId, 
-            DateTime dataCadastro, 
+        public Pedido(int id,
+            int clienteId,
+            DateTime dataCadastro,
             StatusPedidoEnum status)
         {
             Id = id;
@@ -27,24 +27,47 @@ namespace SturmerStore.Domain.Entities
 
         public void AdicionarItem(Produto produto, int quantidade)
         {
-            var item = new ItemPedido(Id, produto, quantidade);
-            Itens.Add(item);
-            
+            var itemExistente = Itens.FirstOrDefault(i => i.ProdutoId == produto.Id);
+
+            if (itemExistente != null)
+            {
+                itemExistente.SomarQuantidade(quantidade);
+            }
+            else
+            {
+                var novoItem = new ItemPedido(Id, produto, quantidade);
+                Itens.Add(novoItem);
+            }
+
             CalcularValorTotal();
         }
 
-        public void RemoverItem(int produtoId)
+        public void DiminuirQuantidadeItem(int produtoId, int quantidade)
         {
-            var item = Itens.FirstOrDefault(i => i.Produto.Id == produtoId);
-            if (item != null)
+            var item = Itens.FirstOrDefault(i => i.ProdutoId == produtoId);
+
+            if (item == null)
+                throw new InvalidOperationException("Item não encontrado");
+
+            var novaQuantidade = item.Quantidade - quantidade;
+
+            if(novaQuantidade < 0)
+                throw new InvalidOperationException("Quantidade a remover acima da quantidade atual");
+
+            if (novaQuantidade == 0)
             {
                 Itens.Remove(item);
-                CalcularValorTotal();
             }
+            else
+            {
+                item.AtualizarQuantidade(novaQuantidade);
+            }
+
+            CalcularValorTotal();
         }
 
-        private void CalcularValorTotal() 
-        { 
+        private void CalcularValorTotal()
+        {
             ValorTotal = Itens.Sum(i => i.ValorParcial);
         }
 
@@ -58,7 +81,7 @@ namespace SturmerStore.Domain.Entities
 
         public void PagarPedido()
         {
-           
+
         }
     }
 }

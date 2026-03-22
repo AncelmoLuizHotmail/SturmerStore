@@ -26,5 +26,18 @@
         {
             ValorParcial = Produto.Preco * Quantidade;
         }
+
+        public void SomarQuantidade(int quantidade)
+        {
+            Quantidade += quantidade;
+        }
+
+        public void AtualizarQuantidade(int quantidade)
+        {
+            Quantidade = quantidade;
+
+            CalcularValorParcial();
+        }
+
     }
 }

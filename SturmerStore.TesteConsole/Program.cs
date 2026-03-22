@@ -65,6 +65,7 @@ foreach (var item in pedido.Itens)
 
 Console.WriteLine($"Valor Total do Pedido: R${pedido.ValorTotal}");
 
+Console.WriteLine();
 Console.WriteLine("Deseja remover algum item? (S/N)");
 var respostaRemover = char.Parse(Console.ReadLine());
 
@@ -72,13 +73,27 @@ while (respostaRemover == 'S' || respostaRemover == 's')
 {
     Console.Write("Digite o código do produto que deseja remover: ");
     var codigoProdutoRemover = int.Parse(Console.ReadLine());
-    pedido.RemoverItem(codigoProdutoRemover);
+    Console.Write("Digite a quantidade a retirar: ");
+    var qtdRemover = int.Parse(Console.ReadLine());
+
+    pedido.DiminuirQuantidadeItem(codigoProdutoRemover, qtdRemover);
 
     Console.Write("Deseja remover mais algum item? (S/N)");
     respostaRemover = char.Parse(Console.ReadLine());
 }
 
+Console.WriteLine();
+Console.WriteLine("COMANDA DO PEDIDO");
+foreach (var item in pedido.Itens)
+{
+    Console.WriteLine($@"Produto: {item.Produto.Nome} - Preço: R${item.Produto.Preco} - Quantidade: {item.Quantidade} - Valor: R${item.ValorParcial}");
+}
+
 Console.WriteLine($"Valor Total do Pedido: R${pedido.ValorTotal}");
+
+
+
+//Console.WriteLine($"Valor Total do Pedido: R${pedido.ValorTotal}");
 
 //Console.WriteLine();
 
